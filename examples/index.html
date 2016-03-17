@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Vue Freeze Examples</title>
+</head>
+<body>
+
+	<div id="app">
+	  <h1>{{ $state.ui.msg }}</h1>
+	  <p>
+	    <b>user role:</b> {{ $state.user.current.role }}
+	  </p>
+	  <button @click="changeMsg">Change The Message!</button>
+	  <button @click="changeRole">Change The Role!</button>
+	</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.17/vue.min.js"></script>
+	<script src="../build/vue-freeze.min.js"></script>
+
+	<script type="text/javascript">
+		// Let's make a state!
+		// Using plain javascript for easy understanding...
+
+		/*********
+		*
+		* First of all, we need to define each individual state.
+		* to keep our apps organized~
+		*
+		**********/
+
+		// UI states
+		var ui = {
+			msg: "Hello Vue!"
+		};
+
+
+		// User States
+		var user = { // for user states
+			current: {
+				role: "user"
+			},
+		}
+
+
+
+
+		/*********
+		*
+		* After define all states, we should
+		* put them to the global states~
+		* Single state for single apps
+		*
+		**********/
+
+		// Define the global states
+		var state = { ui, user };
+
+		/*********
+		*
+		* The next step is, make some actions for mutating our states
+		* Actions just a function contain some Freezer event
+		*
+		**********/
+
+
+		/**
+		* Make a global action, don't forget to give it an argument
+		* To pass the store, e.g. 'store'
+		*/
+		var action = function(store){
+
+
+		  /**
+		  * the writing style of the event name is up to you,
+		  * because it's string based
+		  */
+		  store.on('ui:update_msg', function(arg){
+		    // mutate the ui.msg state
+		    store.get().ui.set({ msg: arg });
+		  });
+
+
+		  /**
+		  * The store callback pass some value
+		  * @param {Mixed} arg -> passing new data
+		  * @param {Object} old -> still bring the old state
+		  * The old state will be readable, you can use it if neccessary
+		  */
+		  store.on('user:change_role', function(arg,old){
+		    // mutate user.current.role state
+		    store.get().user.current.set({ role: arg });
+		  });
+
+
+		};
+
+		/*********
+		*
+		* The Final step, install the Vue Freeze plugin into your Vue app
+		*
+		**********/
+
+		// Install it!
+		Vue.use( VueFreeze, { state: state, action: action } );
+
+
+		// Make a new Vue
+		var App = new Vue({
+			el: "#app",
+
+			methods: {
+				changeMsg: function(){
+					this.$action('ui:update_msg',"Hai, I'm Vue Freeze!");
+				},
+				changeRole: function(){
+					this.$action('user:change_role','admin');
+				}
+			}
+		});
+	</script>
+
+</body>
+</html>
