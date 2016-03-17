@@ -1,27 +1,31 @@
 var gulp = require('gulp');
+var connect = require('gulp-connect');
 var gutil = require('gulp-util');
 var browserify = require('browserify');
 var watchify = require('watchify');
+var vueify = require('vueify');
 var babelify = require('babelify');
+var sass = require('gulp-sass');
+var stylus = require('gulp-stylus');
 var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
 
 function scripts() {
 
 	var b = browserify({
-		entries: ['./src/vue-freeze.js'],
+		entries: ['./assets/js/main.js'],
 		debug: true,
 		cache: {},
 		packageCache: {},
 		fullPaths: true,
-		transform: [babelify],
+		transform: [babelify,vueify],
 		plugin: [watchify]
 	});
 
 	function bundling() {
 		b.bundle()
-			.pipe(source('vue-freeze.js'))
-			.pipe(gulp.dest('./build/'));
+			.pipe(source('build.js'))
+			.pipe(gulp.dest('./assets/js/'));
 	};
 
 	b.on('update', function () {
@@ -39,11 +43,24 @@ function scripts() {
 	});
 	bundling();
 
+	// b.add('./assets/js/main.js');
+
 }
 
-gulp.task('dev', function () {
-	return scripts();
+
+gulp.task('build-css',function () {
+	return gulp.src('./assets/stylus/main.styl')
+		.pipe(sourcemaps.init())
+		.pipe(stylus({
+				compress: true
+		}))
+		.pipe(sourcemaps.write())
+		.pipe(gulp.dest('./assets/css/'));
 });
 
+gulp.task('dev', function () {
+	gulp.watch('./assets/stylus/**/*.styl',['build-css']);
+	// return scripts();
+});
 
 gulp.task('default', ['dev']);
