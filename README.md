@@ -5,6 +5,8 @@ Simple state management whitout bloating API and Concept. Just states and action
 
 ## [HOME PAGE](https://bosnaufal.github.io/vue-freeze)
 
+## In some cases Vue Js need to inject the data. While I don't know yet How its injections work. Seems Vue Freeze isn't working for now. :( I'm Sorry Guys~
+
 ## Credits
 Thanks to [Arqex](https://github.com/arqex/freezer)
 
