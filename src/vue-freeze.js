@@ -33,18 +33,19 @@ import Freezer from './freezer.min.js'
         opt.action(store)
       }
 
-			var cleanUpData = (data) => {
-				return JSON.parse(JSON.stringify(data))
-			}
-
 			// Make a mixin
 			plugin.mixin = {}
 
 			// Mixin Methods For vm instance
 			plugin.mixin.methods = {
+				// For mutable data
+				mutable(data){
+					return JSON.parse(JSON.stringify(data))
+				},
+
 				// set the vm $state to new state
 		    updateState(old,val){
-					this.$set('$state',cleanUpData(store.get()))
+					this.$set('$state',store.get())
 		    }
 			}
 
@@ -54,7 +55,7 @@ import Freezer from './freezer.min.js'
 
 				// Make Methods
 				Vue.util.defineReactive(this,'$store',store)
-				Vue.util.defineReactive(this,'$state',cleanUpData(store.get()))
+				Vue.util.defineReactive(this,'$state',store.get())
 		    Vue.util.defineReactive(this,'$action', function(eventName,args){
 					// trigger freeze event with pass the old value at the end
 					store.trigger(eventName,args,me.$state)
@@ -63,7 +64,7 @@ import Freezer from './freezer.min.js'
 				// When Store Updated~
 		    this.$store.on('update', function (val) {
 					// Update the state
-		      me.updateState(cleanUpData(me.$state),val)
+		      me.updateState(me.$state,val)
 		    })
 			}
 
