@@ -228,6 +228,7 @@ var App = new Vue({
           <li><a href="#$state">$state</a></li>
           <li><a href="#$action">$action</a></li>
           <li><a href="#$store">$store</a></li>
+          <li><a href="#mutable">mutable()</a></li>
           <li><a href="#options">Options</a></li>
         </ul>
         <br />
@@ -306,6 +307,22 @@ this.$store.on('msg:delete', function(val){
 </code></pre>
 
         <p>All those things probably can make you fall in the anti pattern. Instead access the store directly via your VM. You can access the store via <a href="#the-action">actions container</a> which is also have a <a href="https://github.com/arqex/freezer#api">full feature of Freezer Object</a>.</p>
+
+
+        <br/>
+        <h3 id="mutable">mutable()</h3>
+        <p>Lately, I've been confusing how can I use the immutable data in v-for directive? while Vue need to extend some data ( <code>__v_for_x</code> ) to our object? therefore I decided suspend this project for a moment :( But after prayed to God, I got little idea to solve it, Yeah Thanks God! to make our immutable data work, we need to convert it into <code>mutable()</code> data. So, Vue can extend it for tracking or something it wants. Take a peek this thing!</p>
+
+<pre><code data-language="html">&lt;ul&gt;
+  &lt;li v-for=&quot;todo in mutable($state.todoApp.todos)&quot; &gt;
+    {{ todo.content }}
+    &lt;button @click=&quot;del($index)&quot;&gt;X&lt;/button&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+        <p>You can fork the working example <a href="https://github.com/bosnaufal/vue-freeze-todomvc">here</a></p>
+
 
         <br/>
         <h3 id="options">Options</h3>
