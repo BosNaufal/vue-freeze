@@ -5,7 +5,7 @@ Simple state management whitout bloating API and Concept. Just states and action
 
 ## [HOME PAGE](https://bosnaufal.github.io/vue-freeze)
 
-## Now It's Working Guys! [Fixed](http://bosnaufal.github.io/vue-freeze/#state)
+## Now It's Working Guys! [How Immutable State Works](http://bosnaufal.github.io/vue-freeze/#how-immutable-state-works)
 
 ## Credits
 Thanks to [Arqex](https://github.com/arqex/freezer)

@@ -42,6 +42,13 @@ import Freezer from './freezer.min.js'
       // Make a mixin
       plugin.mixin = {}
 
+      // To make the state become watchable!
+      plugin.mixin.data = function(){
+        return{
+          state: {}
+        }
+      }
+
       // Mixin Methods For vm instance
       plugin.mixin.methods = {
         // set the vm state to new state
@@ -55,7 +62,7 @@ import Freezer from './freezer.min.js'
         var me = this
 
         // set global state as internal state
-        Vue.util.defineReactive(this,'state',mutable(store.get()))
+        me.$set('state',mutable(store.get()))
 
         // Make Methods
         Vue.util.defineReactive(this,'$store',store)
