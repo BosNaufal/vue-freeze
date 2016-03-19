@@ -53,6 +53,7 @@
       <a href="#API">API</a>
       <a href="https://github.com/BosNaufal/vue-freeze">DOWNLOAD</a>
       <a href="http://codepen.io/BosNaufal/pen/rejjvZ">DEMO</a>
+      <a href="#faq">FAQ</a>
     </div>
   </nav>
 
@@ -71,7 +72,7 @@
         <p>Sorry, I really didn't mean it. Oke you will be able to keep it. But, how about your collabs? You will oversee all your collabs by yourself? Are you sure if you're in the right team? Are you sure they will not forget the pattern?</p>
 
         <h2>Well, I can tell them later. So what is your advice?</h2>
-        <p>To keep your state management in the right working pattern, you need some system that preventing you to do some direct mutate which is will be your problem in the future. So, I'll advise you to use immutable state which you can't mutate it directly. It mean you should mutate your state via actions. When you do wrong, it will produce an error. Simple.</p>
+        <p>To keep your state management in the right working pattern, you need some system that preventing you to do some direct mutate which is will be your problem in the future. So, I'll advise you to use immutable state which you can't mutate it directly. It mean you should mutate your state via actions. When you do wrong, it will not mutate the global state. Simple.</p>
 
         <h2>Immutable? Do you mean <a href="https://facebook.github.io/immutable-js">immutable.js</a>?</h2>
         <p>Yeah, it's either best library to make an immutable data. But we'll not use it. why? because you need to learn some <a href="https://facebook.github.io/immutable-js/docs/#/">API</a> and some concept again. How about using  <a href="https://github.com/arqex/freezer">Freezer.js</a>? besides the size is smaller, it also has a smaller <a href="https://github.com/arqex/freezer#example">API</a> which you can learn in 5 or 10 minutes. To keep the Vue being simple, <span class="highlight">Vue Freeze</span> will use <a href="https://github.com/arqex/freezer">Freezer.js</a>! that's way it called <span class="highlight">Vue Freeze</span></p>
@@ -84,7 +85,7 @@
 
         <br />
         <h3 id="install">Installation</h3>
-        <p>Just include the vue-freeze.js to your porject. After that, you need to prepare two things. They are:</p>
+        <p>Just include the <a href="https://cdn.rawgit.com/BosNaufal/vue-freeze/master/build/vue-freeze.min.js">vue-freeze.min.js</a> to your porject. After that, you need to prepare two things. They are:</p>
 
 
         <br />
@@ -218,13 +219,11 @@ var App = new Vue({
 
         <p>How do you think? Is it good for you? You can try the working code above <a href="http://bosnaufal.github.io/vue-freeze/examples/index.html">here</a> Or fork my Codepen <a href="http://codepen.io/BosNaufal/pen/rejjvZ">here</a>. If you want to make some todo app, you can fork the Todo MVC example <a href="https://github.com/bosnaufal/vue-freeze-todomvc">here</a></p>
 
-
-        <br />
         <h2>I won't too quick to judge. But, How about the API?</h2>
         <p><span class="highlight">Vue Freeze</span> will provide you <code>state</code>, <code>$action</code>, and <code>$store</code>. But you are recommended to use the <code>state</code> and <code>$action</code> only.</p>
 
-        <br />
-        <h3 id="API">The API:</h3>
+        <br /><br />
+        <h2 id="API">The API:</h2>
         <ul class="table-of-content">
           <li><a href="#state">state</a></li>
           <li><a href="#$action">$action</a></li>
@@ -321,6 +320,96 @@ this.$store.on('msg:delete', function(val){
 </code></pre>
 
         <p><code>live</code> Update is explained <a href="https://github.com/arqex/freezer#now">here</a>.</p>
+
+
+        <br /><br />
+        <h2 id="faq" style="margin-bottom:55px;">FAQS</h2>
+
+        <h3 id="how-immutable-state-works">How The Immutable State Works?</h3>
+        <p>Pretty simple you can take a look my <code>immutability-test.vue</code> in my <a href="https://github.com/BosNaufal/vue-freeze-todomvc/blob/master/src/components/immutability-test.vue">Vue Freeze Todo MVC Example</a>. The code look like:</p>
+
+<pre><code data-language="html">&lt;template&gt;
+  &lt;div&gt;
+    &lt;p&gt;Global State UI Typing : {{ state.ui.typing }}&lt;/p&gt;
+    &lt;button @click=&quot;tryMutate&quot;&gt;Try Direct Mutate!&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+  export default {
+    methods: {
+      tryMutate(){
+        // here the immutable work~
+        // direct mutate will not affecting the global state
+        // it&apos;s just affecting the internal state only
+        this.state.ui.typing = !this.state.ui.typing
+        console.log(&apos;Immutabillity Test&apos;,this.state.ui.typing); // true
+        // yet the global action will affect to our global state
+        // this.$action(&apos;user:typing&apos;,true); // uncoment this
+      },
+    },
+  };
+&lt;/script&gt;
+</code></pre>
+
+        <p>The Direct mutate will not affecting the global state. it's just affecting the internal state only. To change the global state, you need to mutate it via actions. Simple, right?</p>
+        <p>As you see <a href="http://bosnaufal.github.io/vue-freeze-todomvc/">here</a> Global <code>state.ui.typing</code> will triggers the todo app to display "User is typing....". But when we pushed the "Direct Mutate" Button, the text is not showing up. It caused by the immutability of the state. The button event just changes the internal state NOT the global state. The ONLY way to mutate our global state is via action.</p>
+
+
+
+        <br />
+        <h3 id="organize-the-actions">How can I organize my actions into separated files?</h3>
+        <p>Just repeat it! I will give you an example. let's say that we have 2 separated actions files in <code>actions</code> folder.</p>
+
+<pre><code data-language="javascript"> // ./actions/todo.js
+let todoActions = function(store){
+
+  store.on('todo:add', function(todo){
+    store.get().todoApp.todos.push(todo);
+  });
+
+  store.on('todo:delete', function(index){
+    store.get().todoApp.todos.splice(index,1);
+  });
+
+};
+
+export default todoActions;
+</code></pre>
+
+        <p><code>todo.js</code> only handles the todos state only. While the actions for handles the ui state is put in the <code>ui.js</code></p>
+
+<pre><code data-language="javascript"> // ./actions/ui.js
+let UIActions = function(store){
+
+  store.on('ui:user_is_typing', function(typing){
+    store.get().ui.set({ typing: typing });
+  });
+
+};
+
+export default UIActions;
+</code></pre>
+
+        <p>We've just made all actions of our todo app in separated files. Now we need to combine it in the single root action.</p>
+
+<pre><code data-language="javascript"> // ./action.js
+
+import todoActions from './actions/todo.js';
+import UIActions from './actions/ui.js';
+
+let action = function(store){
+
+  todoActions(store);
+  UIActions(store);
+
+};
+
+export default action;
+</code></pre>
+
+        <p>Done!</p>
+
 
       </article>
     </div>

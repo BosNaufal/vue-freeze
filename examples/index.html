@@ -7,16 +7,16 @@
 <body>
 
 	<div id="app">
-	  <h1>{{ $state.ui.msg }}</h1>
+	  <h1>{{ state.ui.msg }}</h1>
 	  <p>
-	    <b>user role:</b> {{ $state.user.current.role }}
+	    <b>user role:</b> {{ state.user.current.role }}
 	  </p>
 	  <button @click="changeMsg">Change The Message!</button>
 	  <button @click="changeRole">Change The Role!</button>
 	</div>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.17/vue.min.js"></script>
-	<script src="https://cdn.rawgit.com/BosNaufal/vue-freeze/master/build/vue-freeze.min.js"></script>
+	<script src="https://rawgit.com/BosNaufal/vue-freeze/master/build/vue-freeze.min.js"></script>
 
 	<script type="text/javascript">
 		// Let's make a state!
