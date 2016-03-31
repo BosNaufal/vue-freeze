@@ -6,7 +6,7 @@
 *
 */
 import Freezer from './freezer.min.js'
-
+import assign from '../node_modules/babelify/node_modules/lodash/object/assign.js'
 
 (function(){
 
@@ -53,7 +53,8 @@ import Freezer from './freezer.min.js'
       plugin.mixin.methods = {
         // set the vm state to new state
         updateState(old,val){
-          this.$set('state',mutable(store.get()))
+          let newState = assign({},this.state,store.get().toJS())
+          this.$set('state',newState)
         }
       }
 
