@@ -2,11 +2,12 @@
 * Licensed Under MIT (http://opensource.org/licenses/MIT)
 *
 * [ Vue Freeze JS ]
-*   Version 1.0.0
+*   Version 0.0.1
 *
 */
-import Freezer from './freezer.min.js'
-import assign from '../node_modules/babelify/node_modules/lodash/object/assign.js'
+
+import Freezer from 'freezer-js'
+import assign from 'lodash/assign.js'
 
 (function(){
 
@@ -15,15 +16,14 @@ import assign from '../node_modules/babelify/node_modules/lodash/object/assign.j
     install(Vue,opt){
 
 
-      // Check the Freezer
-      if( typeof Freezer == 'undefined' ) console.warn('[Vue Freeze]: You Must Install Freezer.js firs!')
+      // Check the Freezer~
+      if( typeof Freezer == 'undefined' ) return console.warn('[Vue Freeze]: You Must Install Freezer.js firs!')
 
       var plugin = this
 
       // Plugin Store
       if(typeof opt  == 'undefined') {
-        console.warn('[Vue Freeze]: Please Specify the store! Via Vue.use Options!')
-        return false
+        return console.warn('[Vue Freeze]: Please Specify the store! Via Vue.use Options!')
       }
       else {
         // live update?
