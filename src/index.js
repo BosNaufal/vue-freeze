@@ -17,7 +17,7 @@ import assign from 'lodash/assign.js'
 
 
       // Check the Freezer~
-      if( typeof Freezer == 'undefined' ) return console.warn('[Vue Freeze]: You Must Install Freezer.js firs!')
+      if( typeof Freezer == 'undefined' ) return console.warn('[Vue Freeze]: You Must Install Freezer.js first!')
 
       var plugin = this
 
