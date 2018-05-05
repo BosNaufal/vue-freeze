@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <style>
+      .full-screen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="codemi-app"></div>
+    <script>
+      var codemiLink = 'https://tokopedia.codemi.co.id'
+      var queryString = window.location.search.substr(1)
+      var iframe = document.body.querySelector('#codemi-app')
+      iframe.innerHTML = '<iframe class="full-screen" src="' + codemiLink + '/university?' + queryString + '" style="border:none;"></iframe>'
+
+      function subscribeMessage(e) {
+        if (e.origin === codemiLink) {
+          var data = e.data
+          if (data.type === 'REMOVE_QUERY') {
+            window.location.search = ""
+          }
+        }
+      }
+
+      window.addEventListener('message', subscribeMessage, false)
+    </script>
+  </body>
+</html>
